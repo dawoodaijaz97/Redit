@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Carnac</title>
+    <script>
+        window.$ = window.jQuery = require("../js/jquery");
+        const db = require("../js/db")
+function validate(val){
+    if (typeof val === 'undefined' || val === "")
+    {
+        return false;
+    }
+    return true;
+}
+
+            $(document).ready(function(){
+                
+
+                $("#form").submit(function(event){
+                event.preventDefault();
+                
+                var m = 0;    
+                if ($("#m").prop("checked", true))
+                {
+                    m = 1;
+                }
+    
+
+                if (validate($("#fname").val()) === false)
+                {
+                    alert("First Name is required!")
+                }
+                else if (validate($("#lname").val()) === false)
+                {
+                    alert("Last Name is required!")
+                }
+                else if (validate($("#email").val()) === false)
+                {
+                    alert("Email is required!")
+                }
+                else if (validate($("#password").val()) === false)
+                {
+                    alert("Password is required!")
+                }
+                else if (validate($("#dob").val()) === false)
+                {
+                    alert("Date of birth is required!")
+                }
+
+
+                var formData = {
+                    fname: $("#fname").val(),
+                    lname: $("#lname").val(),
+                    email: $("#email").val(),
+                    password: $("#password").val(),
+                    dob: $("#dob").val(),
+                    gender: m
+                }
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: db.url() + db.port() + "/register",
+                    data: JSON.stringify(formData),
+                    dataType: 'json',
+                    success: function(data){
+                        console.log(data.status);
+                        alert(data.status);
+                        if (data.code === 200)
+                        {
+                            $("#password").val().replace = "";
+                            window.location.replace("login.html");
+                        }
+                        $("#email").css("border-color","red");
+                    },
+                    error: function(e, data){
+                        alert("ERROR while registering!");
+                        console.log("ERROR: ", e);
+                    }
+    
+                });
+            });
+
+                
+                
+/*                
+                db.db().connect(function(err, a){
+                //throw error and quit app if connection fails
+                if (err){
+                    throw err;
+                }
+                else
+                {
+                    let sql = "INSERT INTO users VALUES (NULL,'"+ formData.fname +"','"+ formData.lname +"','"+ formData.email +"','"+ formData.password +"','"+ formData.dob +"',"+ formData.gender +", CURRENT_TIMESTAMP)";
+                    console.log(sql);
+                    db.db().query(sql, function(err, result){
+                        if (err) throw err;
+                        console.log("1 record inserted");
+                    });
+                }
+*/
+    
+        });
+//    });
+
+        </script>    
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/style.css">
+ 
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <form id="form" method="post" action="#">
+                <h1 class="form-head">Create your new account!</h1>
+                <hr>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <input id="fname" class="form-control form-control-lg" type="text" placeholder="First Name">
+                        </div>
+                        <div class="col-lg-6">
+                            <input id="lname" class="form-control form-control-lg" type="text" placeholder="Last Name">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input id="email" class="form-control form-control-lg" type="email" name="email" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <input id="password" class="form-control form-control-lg" type="password" name="password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="dob">Date of Birth:</label>
+                            <input type="date" class="form-control" id="dob">
+                        </div>
+                        <div class="col-lg-6">
+                            <label>Gender:</label><br/>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" value="true" name="gender">
+                                <label class="form-check-label" for="male">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" value="false" name="gender">
+                                <label class="form-check-label" for="female">Female</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <input class="form-control btn-primary" type="submit" value="Register Now!">
+
+            </form>
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+</div>
+
+</body>
+</html>
