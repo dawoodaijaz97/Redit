@@ -1,12 +1,14 @@
+require('dotenv').config();
+
 //port
 exports.port = function()
 {
-    return process.env.port;
+    return process.env.PORT;
 }
 //base url
 exports.url = function ()
 {
-    ur = process.env.host + ":";
+    ur = process.env.HOST + ":";
     return ur;
 }
 //database credentials

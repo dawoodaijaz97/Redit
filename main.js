@@ -2,7 +2,7 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 const mysql = require('mysql');
-const db = require('./js/db');
+const db = require('./db');
 require('dotenv').config();
 
 const {app, BrowserWindow, Menu} = electron;
