@@ -30,11 +30,7 @@ app.on('ready', function(){
         }
 
         //Load HTML into window
-        mainWindow.loadURL(url.format({
-            pathname: path.join(__dirname, 'html/index.html'),
-            protocol: 'file',
-            slashes: true
-        }));    
+        mainWindow.loadURL(process.env.HOST + ":" + process.env.PORT + '/');    
 
         //wait for page contents to load before displaying electron window
         mainWindow.once('ready-to-show', function(){
@@ -58,10 +54,7 @@ const mainMenuTemplate = [
             {
                 label: 'Dashboard',
                 click(){
-                    mainWindow.loadURL(url.format({
-                        pathname: path.join(__dirname, 'html/index.html'),
-                        slashes: true
-                    }));
+                    mainWindow.loadURL(process.env.HOST + ":" + process.env.PORT + '/dashboard');
                     mainWindow.once('ready-to-show', function(){
                         mainWindow.show();
                     });
@@ -71,10 +64,7 @@ const mainMenuTemplate = [
             {
                 label: 'Login',
                 click(){
-                    mainWindow.loadURL(url.format({
-                        pathname: path.join(__dirname, 'html/login.html'),
-                        slashes: true
-                    }));
+                    mainWindow.loadURL(process.env.HOST + ":" + process.env.PORT + '/');
                     mainWindow.once('ready-to-show', function(){
                         mainWindow.show();
                     });
@@ -84,15 +74,21 @@ const mainMenuTemplate = [
             {
                 label: 'Create New Account!',
                 click(){
-                    mainWindow.loadURL(url.format({
-                        pathname: path.join(__dirname, 'html/register.html'),
-                        slashes: true
-                    }));
+                    mainWindow.loadURL(process.env.HOST + ":" + process.env.PORT + '/sign-up');
                     mainWindow.once('ready-to-show', function(){
                         mainWindow.show();
                     });            
                 }
             },
+            {
+                label: 'Sign out',
+                click(){
+                    mainWindow.loadURL(process.env.HOST + ":" + process.env.PORT + '/logout');
+                    mainWindow.once('ready-to-show', function(){
+                        mainWindow.show();
+                    });            
+                }
+            },            
             {
                 label: 'Exit',
                 accelerator: process.platform = 'darwin' ? 'Command+Q' : 

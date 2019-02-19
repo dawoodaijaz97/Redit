@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <title>Register - Carnac</title>
     <script>
-        window.$ = window.jQuery = require("../js/jquery");
-        const db = require("../db.js");
 
 function validate(val){
     if (typeof val === 'undefined' || val === "")
@@ -50,37 +48,6 @@ function validate(val){
                 }
 
 
-
-                var formData = {
-                    fname: $("#fname").val(),
-                    lname: $("#lname").val(),
-                    email: $("#email").val(),
-                    password: $("#password").val(),
-                    dob: $("#dob").val(),
-                    gender: m
-                }
-                $.ajax({
-                    type: "POST",
-                    contentType: "application/json",
-                    url: db.url() + db.port() + "/register",
-                    data: JSON.stringify(formData),
-                    dataType: 'json',
-                    success: function(data){
-                        console.log(data.status);
-                        alert(data.status);
-                        if (data.code === 200)
-                        {
-                            $("#password").val().replace = "";
-                            window.location.replace("login.html");
-                        }
-                        $("#email").css("border-color","red");
-                    },
-                    error: function(e, data){
-                        alert("ERROR while registering!");
-                        console.log("ERROR: ", e);
-                    }
-    
-                });
             });
 
     
@@ -97,7 +64,7 @@ function validate(val){
     <div class="row">
         <div class="col-lg-2"></div>
         <div class="col-lg-8">
-            <form id="form" method="post" action="#">
+            <form id="form" method="post" action="/register">
                 <h1 class="form-head">Create your new account!</h1>
                 <hr>
                 <div class="form-group">
