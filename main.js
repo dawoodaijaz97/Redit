@@ -2,14 +2,23 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 const mysql = require('mysql');
-const db = require('./db');
+const db = require('./config/database');
+var connection = mysql.createConnection(db.connection);
+const exec = require('child_process').exec;
 require('dotenv').config();
 
 const {app, BrowserWindow, Menu} = electron;
 
 let mainWindow;
 
-
+function execute(command, callback) {
+    exec(command, (error, stdout, stderr) => { 
+        callback(stdout); 
+    });
+};
+execute('node server.js', (output) => {
+    console.log(output);
+});
 app.on('ready', function(){
     //create main window
     mainWindow = new BrowserWindow({
@@ -17,12 +26,16 @@ app.on('ready', function(){
         height: 800,
         title: "CARNAC - Reddit Trend Analyzer "
     });
+    mainWindow.webPreferences = {
+        nodeIntegration: true
+    };
     //quit app on close
     mainWindow.on('closed', function(){
         app.quit();
     });
+    
     //connects to mysql
-    db.db().connect(function(err, a){
+    connection.connect(function(err, a){
         //throw error and quit app if connection fails
         if (err){
             app.quit();
@@ -64,7 +77,7 @@ const mainMenuTemplate = [
             {
                 label: 'Login',
                 click(){
-                    mainWindow.loadURL(process.env.HOST + ":" + process.env.PORT + '/');
+                    mainWindow.loadURL(process.env.HOST + ":" + process.env.PORT + '/login');
                     mainWindow.once('ready-to-show', function(){
                         mainWindow.show();
                     });
@@ -74,7 +87,7 @@ const mainMenuTemplate = [
             {
                 label: 'Create New Account!',
                 click(){
-                    mainWindow.loadURL(process.env.HOST + ":" + process.env.PORT + '/sign-up');
+                    mainWindow.loadURL(process.env.HOST + ":" + process.env.PORT + '/signup');
                     mainWindow.once('ready-to-show', function(){
                         mainWindow.show();
                     });            
